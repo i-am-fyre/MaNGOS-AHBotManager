@@ -1,4 +1,4 @@
-# Web App for Managing the MaNGOS Auction House Bot
+# Web App for Managing the MaNGOS Auction House Configuration
 
 A simple web app to display items that are included/excluded in the Auction House bot for MaNGOS servers.
 
@@ -29,5 +29,3 @@ Once the pre-requisites above have been installed and configurations are set, do
 - `export FLASK_APP=main.py`
 - `flask run`
 Your local server should then be running at http://localhost:5000
-
-If you want to see raw data for all quests, go to: http://localhost:5000/all
