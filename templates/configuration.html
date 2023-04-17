@@ -1,0 +1,538 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col align-self-center">
+            <form method="post">
+                {{ form.csrf_token }}
+                <p></p>
+                <div class="card">
+                    <h5 class="card-header">
+                        Name of Bot
+                    </h5>
+                    <div class="card-body">
+                        <div class="form-group">
+                            {{ form.character_name.label }}
+                            <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="The name of the character that the bot will use to auction items in the Alliance, Horde and neutral auction houses.<hr><i>Default: '' (No owner)</i><br>(Must be an existing character)"></i>
+                            {{ form.character_name(id="character_name", class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+                <p></p>
+                <div class="card">
+                    <h5 class="card-header">
+                        <div class="form-group form-switch">
+                            {{ form.seller_enabled(class="form-check-input", type="checkbox", checked=form.seller_enabled.data, value="1") }}
+                            {{ form.seller_enabled.label(class="form-check-label") }}
+                            <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable sales functionality.<hr><i>Default: 0 (Disabled)</i>"></i>
+                        </div>
+                    </h5>
+                    <div class="card-body">
+                        <div class="card mb-2">
+                            <h5 class="card-header">
+                                Auction Houses
+                            </h5>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <i>Defines specifics for each faction's auction houses.</i>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 form-group">
+                                        {{ form.alliance_ratio.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable sales on Alliance auction houses.<hr><i>Default: 100 (Enabled with 100% of items)</i>"></i>
+                                        {{ form.alliance_ratio(class="form-control") }}
+                                    </div>
+                                    <div class="col-4 form-group">
+                                        {{ form.horde_ratio.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable sales on Horde auction houses.<hr><i>Default: 100 (Enabled with 100% of items)</i>"></i>
+                                        {{ form.horde_ratio(class="form-control") }}
+                                    </div>
+                                    <div class="col-4 form-group">
+                                        <label for="{{ form.neutral_ratio.id }}" >
+                                            {{ form.neutral_ratio.label }}
+                                            <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable sales on Neutral auction houses.<hr><i>Default: 100 (Enabled with 100% of items)</i>"></i>
+                                        </label>
+                                        {{ form.neutral_ratio(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 form-group">
+                                        {{ form.alliance_price_ratio.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the price ratio for auctions on the Alliance auction houses.<hr><i>Default: 200</i>"></i>
+                                        {{ form.alliance_price_ratio(class="form-control") }}
+                                    </div>
+                                    <div class="col-4 form-group">
+                                        {{ form.horde_price_ratio.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the price ratio for auctions on the Horde auction houses.<hr><i>Default: 200</i>"></i>
+                                        {{ form.horde_price_ratio(class="form-control") }}
+                                    </div>
+                                    <div class="col-4 form-group">
+                                        {{ form.neutral_price_ratio.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the price ratio for auctions on the Neutral auction houses.<hr><i>Default: 200</i>"></i>
+                                        {{ form.neutral_price_ratio(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card my-2">
+                            <h5 class="card-header">
+                                Auction Creation Settings
+                            </h5>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <i>Defines specifics for auction creation.</i>
+                                </div>
+                                <div class="row">
+                                    <div class="col-2 form-group">
+                                        {{ form.mintime.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Minimum time for new auctions.<hr><i>Default: 1 (Hour)</i>"></i>
+                                        {{ form.mintime(class="form-control") }}
+                                    </div>
+                                    <div class="col-2 form-group">
+                                        {{ form.maxtime.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Maximum time for new auctions.<hr><i>Default: 72 (Hours)</i>"></i>
+                                        {{ form.maxtime(class="form-control") }}
+                                    </div>
+                                    <div class="col-4 form-group">
+                                        {{ form.itemspercycle_boost.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Used to define how many auctions to add per cycle in an uninitialized auction table.<hr><i>Default: 75</i>"></i>
+                                        {{ form.itemspercycle_boost(class="form-control") }}
+                                    </div>
+                                    <div class="col-4 form-group">
+                                        {{ form.itemspercycle_normal.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Used to define how many auctions to add per cycle in an initialized auction table.<hr><i>Default: 20</i>"></i>
+                                        {{ form.itemspercycle_normal(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row mx-1 mt-3">
+                                    <div class="col-4 form-group form-switch">
+                                        {{ form.buyprice_seller(class="form-check-input", type="checkbox", checked=form.buyprice_seller.data, value="1") }}
+                                        {{ form.buyprice_seller.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable the use of BuyPrice or SellPrice to determine bid pricing.<hr><i>Default: 1 (SellPrice)</i>"></i>
+                                    </div>
+                                </div>
+                                <div class="row mx-1 my-3">
+                                    <div class="col-3 form-group form-switch">
+                                        {{ form.items_vendor(class="form-check-input", type="checkbox", checked=form.items_vendor.data, value="1") }}
+                                        {{ form.items_vendor.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Offer items sold by vendors as auctions.<hr><i>Default: 0</i>"></i>
+                                    </div>
+                                    <div class="col-3 form-group form-switch">
+                                        {{ form.items_loot(class="form-check-input", type="checkbox", checked=form.items_loot.data, value="1") }}
+                                        {{ form.items_loot.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Offer lootable/fishable items as auctions.<hr><i>Default: 1</i>"></i>
+                                    </div>
+                                    <div class="col-3 form-group form-switch">
+                                        {{ form.items_misc(class="form-check-input", type="checkbox", checked=form.items_misc.data, value="1") }}
+                                        {{ form.items_misc.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Offer miscellaneous items as auctions (not recommended).<hr><i>Default: 0</i>"></i>
+                                    </div>
+                                    <div class="col-3 form-group form-switch">
+                                        {{ form.bind_no(class="form-check-input", type="checkbox", checked=form.bind_no.data, value="1") }}
+                                        {{ form.bind_no.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Indicates which bonding types can be put up for auction - Items that don't bind.<hr><i>Default: 1 (Allowed)</i>"></i>
+                                    </div>
+                                </div>
+                                <div class="row mx-1 my-3">
+                                    <div class="col-3 form-group form-switch">
+                                        {{ form.bind_pickup(class="form-check-input", type="checkbox", checked=form.bind_pickup.data, value="1") }}
+                                        {{ form.bind_pickup.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Indicates which bonding types can be put up for auction - Items that bind on pickup.<hr><i>Default: 0 (Not allowed)</i>"></i>
+                                    </div>
+                                    <div class="col-3 form-group form-switch">
+                                        {{ form.bind_equip(class="form-check-input", type="checkbox", checked=form.bind_equip.data, value="1") }}
+                                        {{ form.bind_equip.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Indicates which bonding types can be put up for auction - Items that bind on equip.<hr><i>Default: 1 (Allowed)</i>"></i>
+                                    </div>
+                                    <div class="col-3 form-group form-switch">
+                                        {{ form.bind_use(class="form-check-input", type="checkbox", checked=form.bind_use.data, value="1") }}
+                                        {{ form.bind_use.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Indicates which bonding types can be put up for auction - Items that bind on use.<hr><i>Default: 1 (Allowed)</i>"></i>
+                                    </div>
+                                    <div class="col-3 form-group form-switch">
+                                        {{ form.bind_quest(class="form-check-input", type="checkbox", checked=form.bind_quest.data, value="1") }}
+                                        {{ form.bind_quest.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Indicates which bonding types can be put up for auction - Quest items.<hr><i>Default: 0 (Not allowed)</i>"></i>
+                                    </div>
+                                </div>
+                                <div class="row mx-1 my-3">
+                                    <div class="col-3 form-group form-switch">
+                                        {{ form.lockbox_enabled(class="form-check-input", type="checkbox", checked=form.lockbox_enabled.data, value="1") }}
+                                        {{ form.lockbox_enabled.label(class="form-check-label") }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable sales of lock boxes.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 form-group">
+                                        {{ form.items_itemlevel_min.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing items above this item level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.items_itemlevel_min(class="form-control") }}
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.items_itemlevel_max.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing items below this item level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.items_itemlevel_max(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 form-group">
+                                        {{ form.items_reqlevel_min.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing items above this required level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.items_reqlevel_min(class="form-control") }}
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.items_reqlevel_max.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing items below this required level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.items_reqlevel_max(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 form-group">
+                                        {{ form.items_reqskill_min.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing items above this skill level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.items_reqskill_min(class="form-control") }}
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.items_reqskill_max.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing items below this skill level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.items_reqskill_max(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 form-group">
+                                        {{ form.class_misc_mount_reqlevel_min.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing mounts above this required level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_misc_mount_reqlevel_min(class="form-control") }}
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.class_misc_mount_reqlevel_max.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing mounts below this required level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_misc_mount_reqlevel_max(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 form-group">
+                                        {{ form.class_misc_mount_reqskill_min.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing mounts above this skill level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_misc_mount_reqskill_min(class="form-control") }}
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.class_misc_mount_reqskill_max.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing mounts below this skill level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_misc_mount_reqskill_max(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 form-group">
+                                        {{ form.class_glyph_reqlevel_min.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing glyphs above this required level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_glyph_reqlevel_min(class="form-control") }}
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.class_glyph_reqlevel_max.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing glyphs below this required level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_glyph_reqlevel_max(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 form-group">
+                                        {{ form.class_glyph_itemlevel_min.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing glyphs above this item level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_glyph_itemlevel_min(class="form-control") }}
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.class_glyph_itemlevel_max.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing glyphs below this item level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_glyph_itemlevel_max(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 form-group">
+                                        {{ form.class_tradegood_itemlevel_min.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing trade good items above this item level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_tradegood_itemlevel_min(class="form-control") }}
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.class_tradegood_itemlevel_max.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing trade good items below this item level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_tradegood_itemlevel_max(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 form-group">
+                                        {{ form.class_container_itemlevel_min.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing containers above this item level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_container_itemlevel_min(class="form-control") }}
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.class_container_itemlevel_max.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable listing containers below this item level.<hr><i>Default: 0 (Disabled)</i>"></i>
+                                        {{ form.class_container_itemlevel_max(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card my-2">
+                            <h5 class="card-header">
+                                Item Quality
+                            </h5>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <i>Defines the amount of auctions to be created for each item quality. Values will be adjusted using faction specific settings (if specified).</i>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 form-group">
+                                        {{ form.items_amount_grey.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the amount of auctions to be created for grey quality items. Values will be adjusted using faction specific settings (if specified).<hr><i>Default: 0</i>"></i>
+                                        {{ form.items_amount_grey(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.items_amount_white.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the amount of auctions to be created for white quality items. Values will be adjusted using faction specific settings (if specified).<hr><i>Default: 2000</i>"></i>
+                                        {{ form.items_amount_white(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.items_amount_green.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the amount of auctions to be created for green quality items. Values will be adjusted using faction specific settings (if specified).<hr><i>Default: 2500</i>"></i>
+                                        {{ form.items_amount_green(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.items_amount_blue.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the amount of auctions to be created for blue quality items. Values will be adjusted using faction specific settings (if specified).<hr><i>Default: 1500</i>"></i>
+                                        {{ form.items_amount_blue(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 form-group">
+                                        {{ form.items_amount_purple.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the amount of auctions to be created for purple quality items. Values will be adjusted using faction specific settings (if specified).<hr><i>Default: 1000</i>"></i>
+                                        {{ form.items_amount_purple(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.items_amount_orange.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the amount of auctions to be created for orange quality items. Values will be adjusted using faction specific settings (if specified).<hr><i>Default: 0</i>"></i>
+                                        {{ form.items_amount_orange(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.items_amount_yellow.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines the amount of auctions to be created for yellow quality items. Values will be adjusted using faction specific settings (if specified).<hr><i>Default: 0</i>"></i>
+                                        {{ form.items_amount_yellow(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card my-2">
+                            <h5 class="card-header">
+                                Item Classes
+                            </h5>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <i>Defines which item classes can be put up for auction. See pre-defined classes in ItemClass.dbc. These value are preference values, maximum is 10, minimum is 0.</i>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 form-group">
+                                        {{ form.class_consumable.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (consumables) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 6</i>"></i>
+                                        {{ form.class_consumable(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_container.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (containers) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 4</i>"></i>
+                                        {{ form.class_container(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_weapon.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (weapons) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 8</i>"></i>
+                                        {{ form.class_weapon(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_gem.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (gems) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 3</i>"></i>
+                                        {{ form.class_gem(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 form-group">
+                                        {{ form.class_armor.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (armor) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 8</i>"></i>
+                                        {{ form.class_armor(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_reagent.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (reagents) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 1</i>"></i>
+                                        {{ form.class_reagent(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_projectile.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (projectiles) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 2</i>"></i>
+                                        {{ form.class_projectile(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_tradegood.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (trade goods) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 10</i>"></i>
+                                        {{ form.class_tradegood(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 form-group">
+                                        {{ form.class_generic.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (generics) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 1</i>"></i>
+                                        {{ form.class_generic(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_recipe.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (recipes) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 6</i>"></i>
+                                        {{ form.class_recipe(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_quiver.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (quivers) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 1</i>"></i>
+                                        {{ form.class_quiver(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_quest.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (quests) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 1</i>"></i>
+                                        {{ form.class_quest(class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 form-group">
+                                        {{ form.class_key.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (keys) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 1</i>"></i>
+                                        {{ form.class_key(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_misc.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (miscellaneous) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 5</i>"></i>
+                                        {{ form.class_misc(class="form-control") }}
+                                    </div>
+                                    <div class="col-3 form-group">
+                                        {{ form.class_glyph.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Defines which item classes (glyphs) can be put up for auction. See pre-defined classes in ItemClass.dbc.<br>These values are preference values, maximum is 10, minimum is 0.<hr><i>Default: 3</i>"></i>
+                                        {{ form.class_glyph(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mt-2">
+                            <h5 class="card-header">
+                                Overrides
+                            </h5>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <i>Use a comma separated list of item IDs to include/exlude them over the rules listed above.</i>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.force_include_items.label }}
+                                    <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Allows to include items which would normally be ignored by filter settings.<p>List of ids with delimiter ','.<hr><i>Default: ''</i>"></i>
+                                    {{ form.force_include_items(class="form-control") }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.force_exclude_items.label }}
+                                    <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Allows to exclude items which would normally be included by filter settings.<p>List of ids with delimiter ','.<p>Example: '21878,27774,27811,28117,28122,43949' (this removes zzOld items).<hr><i>Default: ''</i>"></i>
+                                    {{ form.force_exclude_items(class="form-control") }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-group form-switch">
+                            {{ form.seller_debug(class="form-check-input", type="checkbox", checked=form.seller_debug.data, value="1") }}
+                            {{ form.seller_debug.label(class="form-check-label") }}
+                            <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable sales debug mode.<hr><i>Default: 0 (Disabled)</i>"></i>
+                        </div>
+                    </div>
+                </div>
+                <p></p>
+                <div class="card">
+                    <h5 class="card-header">
+                        <div class="form-group form-switch">
+                            {{ form.buyer_enabled(class="form-check-input", type="checkbox", checked=form.buyer_enabled.data, value="1") }}
+                            {{ form.buyer_enabled.label(class="form-check-label") }}
+                            <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable buyer mode.<hr><i>Default: 0 (Disabled)</i>"></i>
+                        </div>
+                    </h5>
+                    <div class="card-body">
+                        <div class="card mb-2">
+                            <h5 class="card-header">
+                                Auction Houses
+                            </h5>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <i>Defines specifics for each faction's auction houses.</i>
+                                </div>
+                                <div class="row mx-1 my-3">
+                                    <div class="col-4 form-group form-switch">
+                                        {{ form.buyer_alliance_enabled(class="form-check-input", type="checkbox", checked=form.buyer_alliance_enabled.data, value="1") }}
+                                        {{ form.buyer_alliance_enabled.label(class="form-check-label") }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable buyer mode for the Alliance auction houses.<hr><i>Default: 1 (Enabled)</i>"></i>
+                                    </div>
+                                    <div class="col-4 form-group form-switch">
+                                        {{ form.buyer_horde_enabled(class="form-check-input", type="checkbox", checked=form.buyer_horde_enabled.data, value="1") }}
+                                        {{ form.buyer_horde_enabled.label(class="form-check-label") }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable buyer mode for the Horde auction houses.<hr><i>Default: 1 (Enabled)</i>"></i>
+                                    </div>
+                                    <div class="col-4 form-group form-switch">
+                                        {{ form.buyer_neutral_enabled(class="form-check-input", type="checkbox", checked=form.buyer_neutral_enabled.data, value="1") }}
+                                        {{ form.buyer_neutral_enabled.label(class="form-check-label") }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable buyer mode for the Neutral auction houses.<hr><i>Default: 1 (Enabled)</i>"></i>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 form-group">
+                                        {{ form.buyer_alliance_chance_ratio.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Determines the chance for buying an item in an Alliance auction house.<hr><i>Default: 3 (literally 1 chance by 3)</i>"></i>
+                                        {{ form.buyer_alliance_chance_ratio(class="form-control") }}
+                                    </div>
+                                    <div class="col-4 form-group">
+                                        {{ form.buyer_horde_chance_ratio.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Determines the chance for buying an item in a Horde auction house.<hr><i>Default: 3 (literally 1 chance by 3)</i>"></i>
+                                        {{ form.buyer_horde_chance_ratio(class="form-control") }}
+                                    </div>
+                                    <div class="col-4 form-group">
+                                        {{ form.buyer_neutral_chance_ratio.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Determines the chance for buying an item in a Neutral auction house.<hr><i>Default: 3 (literally 1 chance by 3)</i>"></i>
+                                        {{ form.buyer_neutral_chance_ratio(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mt-2">
+                            <h5 class="card-header">
+                                Auction Buying Settings
+                            </h5>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <i>Defines specifics for auction buying.</i>
+                                </div>
+                                <div class="row mx-1">
+                                    <div class="col-6 form-group form-switch">
+                                        {{ form.buyer_buyprice(class="form-check-input", type="checkbox", checked=form.buyer_buyprice.data, value="1") }}
+                                        {{ form.buyer_buyprice.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable the use of BuyPrice or SellPrice to determine bid pricing.<hr><i>Default: 0 (use SellPrice)</i>"></i>
+                                    </div>
+                                    <div class="col-6 form-group">
+                                        {{ form.buyer_recheck_interval.label }}
+                                        <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="This specifies the time interval (in minute) between evaluations of identical items. The lower the value is, the higher the chance for an item to be bought.<hr><i>Default: 20 (20 min.)</i>"></i>
+                                        {{ form.buyer_recheck_interval(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-group form-switch">
+                            {{ form.buyer_debug(class="form-check-input", type="checkbox", checked=form.buyer_debug.data, value="1") }}
+                            {{ form.buyer_debug.label(class="form-check-label") }}
+                            <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Enable or disable buyer debug mode.<hr><i>Default: 0 (Disabled)</i>"></i>
+                        </div>
+                    </div>
+                </div>
+                <p></p>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
