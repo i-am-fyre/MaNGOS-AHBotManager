@@ -27,5 +27,6 @@ If you have an existing ahbot.conf, you can place it into the root directory. If
 
 Once the pre-requisites above have been installed and configurations are set, do the following:
 - `export FLASK_APP=main.py`
-- `flask run`
-Your local server should then be running at http://localhost:5000
+- `flask run --port=4832 --host=0.0.0.0`
+  
+Your local server should then be running at http://localhost:4832
