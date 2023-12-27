@@ -30,3 +30,4 @@ Once the pre-requisites above have been installed and configurations are set, do
 - `flask run --port=4832 --host=0.0.0.0`
   
 Your local server should then be running at http://localhost:4832
+- **Note:** Change "localhost" to the IP of your machine hosting the app.
